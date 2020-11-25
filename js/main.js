@@ -21,7 +21,7 @@ function play(e){
     const playerChoice = e.target.id;
     const computerChoice = getComputerChoice();
     const winner = getWinner(playerChoice,computerChoice);
-    console.log(playerChoice,computerChoice,winner);
+    showWinner(winner,computerChoice);
 }
 
 function getComputerChoice(){
@@ -52,11 +52,61 @@ function getWinner(p,c){
         }
     }else if(p === 'scissors'){
         if(c === 'rock'){
-            return 'compter'
+            return 'computer'
         }else{
             return 'player'
         }
     }
 }
 
+function showWinner(winner, computerChoice){
+    if(winner === 'player'){
+        scoreboard.player++;
+        result.innerHTML = `
+            <h1 class="text-win">You Win</h1>
+            <i class="fas fa-hand-${computerChoice}fa-10x"></i>
+            <p>Computer Chose <strong>${computerChoice}</strong></p>
+        `
+    }else if(winner === 'computer'){
+        scoreboard.computer++;
+        result.innerHTML = `
+            <h1 class="text-win">You Lose</h1>
+            <i class="fas fa-hand-${computerChoice}fa-10x"></i>
+            <p>Computer Chose <strong>${computerChoice}</strong></p>
+        `
+    }else{
+        result.innerHTML = `
+            <h1>It's a Draw</h1>
+            <i class="fas fa-hand-${computerChoice}fa-10x"></i>
+            <p>computer chose <strong>${computerChoice}</strong></p>
+        `
+    }
+
+    //showScore
+
+    score.innerHTML = `
+        <p>player:${scoreboard.player}</p>
+        <p>computer:${scoreboard.computer}</p>
+    `
+    modal.style.display = "block";
+
+}
+
+function restartGame(){
+    scoreboard.player = 0;
+    scoreboard.computer = 0;
+    score.innerHTML =`
+        <p>player:0</p>
+        <p>Computer:0</p>
+    `;
+}
+
+function clearModal(e){
+    if(e.target == modal){
+        modal.style.display = "none";
+    }
+}
+
 choices.forEach(choice => addEventListener('click',play));
+window.addEventListener('click',clearModal);
+restart.addEventListener('click',restartGame);
